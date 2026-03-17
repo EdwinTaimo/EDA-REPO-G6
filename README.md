@@ -4,7 +4,7 @@ REPOSITORIO PARA O TRABALHO DE EDA ANO 2
 ##Trabalho Pratico
 
 #Tema:
-Sistema de GestÃ£o de Tarefas
+Sistema de Gestao de Tarefas
 com Lista Ligada
 
 ###Grupo 6
@@ -16,7 +16,7 @@ com Lista Ligada
 
 ### Descricao
 
-Sistema de GestÃ£o de Tarefas com Lista Ligada
+Sistema de Gestao de Tarefas com Lista Ligada
 Um programa que aplicar listas ligadas numa aplicaÃ§Ã£o simples
 que permite:
 #adicionar tarefa
