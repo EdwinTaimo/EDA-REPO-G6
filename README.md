@@ -22,7 +22,7 @@ que permite:
 # adicionar tarefa
 # remover tarefa
 # listar tarefas
-# marcar tarefa como concluÃ­da
+# marcar tarefa como concluida
 
 
 ### Linguagem utilizada
