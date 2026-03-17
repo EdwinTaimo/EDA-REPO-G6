@@ -1,13 +1,13 @@
 # EDA-REPO-G6
 REPOSITORIO PARA O TRABALHO DE EDA ANO 2
-#Estrutura de Dados e Algoritmos
-##Trabalho Pratico
+# Estrutura de Dados e Algoritmos
+## Trabalho Pratico
 
-#Tema:
+### Tema
 Sistema de Gestao de Tarefas
 com Lista Ligada
 
-###Grupo 6
+### Grupo (G6)
 - Alberto Fernando Massada
 - Edwin Jerry Joaquim Taimo Gema
 - Leonel Matavele
@@ -17,12 +17,12 @@ com Lista Ligada
 ### Descricao
 
 Sistema de Gestao de Tarefas com Lista Ligada
-Um programa que aplicar listas ligadas numa aplicaÃ§Ã£o simples
+Um programa que aplicar listas ligadas numa aplicacao simples
 que permite:
-#adicionar tarefa
-#remover tarefa
-#listar tarefas
-#marcar tarefa como concluÃ­da
+# adicionar tarefa
+# remover tarefa
+# listar tarefas
+# marcar tarefa como concluÃ­da
 
 
 ### Linguagem utilizada
