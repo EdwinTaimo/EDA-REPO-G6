@@ -1,1 +1,220 @@
-include
+include/*
+ * =====================================================
+ *  SISTEMA DE GESTAO DE TAREFAS - Lista Ligada em C
+ * =====================================================
+ * Descricao: Gerencia tarefas usando lista ligada simples
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* --- Definicoes ----------------------------------- */
+#define MAX_DESC 256
+
+/* --- Estrutura do No (Tarefa) --------------------- */
+typedef struct Tarefa {
+    int           id;
+    char          descricao[MAX_DESC];
+    int           concluida;    /* 0 = pendente, 1 = concluida */
+    struct Tarefa *proximo;
+} Tarefa;
+
+/* --- Cabeca da lista e contador de IDs ------------ */
+Tarefa *cabeca    = NULL;
+int     proximoID = 1;
+
+/* =====================================================
+ *  FUNCOES DA LISTA LIGADA
+ * ===================================================== */
+
+/* Adicionar tarefa ao final da lista */
+void adicionarTarefa(const char *descricao) {
+    Tarefa *nova = (Tarefa *)malloc(sizeof(Tarefa));
+    if (!nova) {
+        printf("  [ERRO] Memoria insuficiente.\n");
+        return;
+    }
+
+    nova->id = proximoID++;
+    strncpy(nova->descricao, descricao, MAX_DESC - 1);
+    nova->descricao[MAX_DESC - 1] = '\0';
+    nova->concluida = 0;
+    nova->proximo   = NULL;
+
+    if (cabeca == NULL) {
+        cabeca = nova;
+    } else {
+        Tarefa *atual = cabeca;
+        while (atual->proximo != NULL)
+            atual = atual->proximo;
+        atual->proximo = nova;
+    }
+
+    printf("  [OK] Tarefa #%d adicionada: \"%s\"\n", nova->id, nova->descricao);
+}
+
+/* Remover tarefa pelo ID */
+void removerTarefa(int id) {
+    if (cabeca == NULL) {
+        printf("  [AVISO] A lista esta vazia.\n");
+        return;
+    }
+
+    Tarefa *atual    = cabeca;
+    Tarefa *anterior = NULL;
+
+    while (atual != NULL && atual->id != id) {
+        anterior = atual;
+        atual    = atual->proximo;
+    }
+
+    if (atual == NULL) {
+        printf("  [ERRO] Tarefa com ID %d nao encontrada.\n", id);
+        return;
+    }
+
+    if (anterior == NULL)
+        cabeca = atual->proximo;
+    else
+        anterior->proximo = atual->proximo;
+
+    printf("  [OK] Tarefa #%d \"%s\" removida.\n", atual->id, atual->descricao);
+    free(atual);
+}
+
+/* Marcar tarefa como concluida */
+void marcarConcluida(int id) {
+    Tarefa *atual = cabeca;
+
+    while (atual != NULL) {
+        if (atual->id == id) {
+            if (atual->concluida) {
+                printf("  [AVISO] Tarefa #%d ja estava concluida.\n", id);
+            } else {
+                atual->concluida = 1;
+                printf("  [OK] Tarefa #%d marcada como concluida!\n", id);
+            }
+            return;
+        }
+        atual = atual->proximo;
+    }
+
+    printf("  [ERRO] Tarefa com ID %d nao encontrada.\n", id);
+}
+
+/* Listar todas as tarefas */
+void listarTarefas(void) {
+    if (cabeca == NULL) {
+        printf("  (nenhuma tarefa cadastrada)\n");
+        return;
+    }
+
+    printf("\n  %-5s  %-11s  %s\n", "ID", "ESTADO", "DESCRICAO");
+    printf("  %-5s  %-11s  %s\n",
+           "-----", "-----------",
+           "----------------------------------------");
+
+    Tarefa *atual = cabeca;
+    while (atual != NULL) {
+        const char *estado = atual->concluida ? "[CONCLUIDA]" : "[PENDENTE] ";
+        printf("  %-5d  %s  %s\n", atual->id, estado, atual->descricao);
+        atual = atual->proximo;
+    }
+    printf("\n");
+}
+
+/* Libertar toda a memoria da lista */
+void libertarLista(void) {
+    Tarefa *atual = cabeca;
+    while (atual != NULL) {
+        Tarefa *temp = atual;
+        atual = atual->proximo;
+        free(temp);
+    }
+    cabeca = NULL;
+}
+
+/* =====================================================
+ *  MENU E PONTO DE ENTRADA
+ * ===================================================== */
+
+void exibirMenu(void) {
+    printf("\n");
+    printf("  +--------------------------------------+\n");
+    printf("  |   SISTEMA DE GESTAO DE TAREFAS       |\n");
+    printf("  +--------------------------------------+\n");
+    printf("  |  1. Adicionar tarefa                 |\n");
+    printf("  |  2. Remover tarefa                   |\n");
+    printf("  |  3. Listar tarefas                   |\n");
+    printf("  |  4. Marcar tarefa como concluida     |\n");
+    printf("  |  0. Sair                             |\n");
+    printf("  +--------------------------------------+\n");
+    printf("  Escolha uma opcao: ");
+}
+
+int main(void) {
+    int  opcao;
+    int  id;
+    char descricao[MAX_DESC];
+
+    /* Dados de exemplo para facilitar os testes */
+    adicionarTarefa("Estudar listas ligadas em C");
+    adicionarTarefa("Implementar pilhas e filas");
+    adicionarTarefa("Rever ponteiros e alocacao dinamica");
+
+    do {
+        exibirMenu();
+
+        if (scanf("%d", &opcao) != 1) {
+            while (getchar() != '\n');
+            opcao = -1;
+        }
+        while (getchar() != '\n');
+
+        switch (opcao) {
+
+            case 1:
+                printf("  Descricao da tarefa: ");
+                if (fgets(descricao, MAX_DESC, stdin)) {
+                    descricao[strcspn(descricao, "\n")] = '\0';
+                    if (strlen(descricao) == 0)
+                        printf("  [ERRO] Descricao nao pode ser vazia.\n");
+                    else
+                        adicionarTarefa(descricao);
+                }
+                break;
+
+            case 2:
+                listarTarefas();
+                printf("  ID da tarefa a remover: ");
+                if (scanf("%d", &id) == 1)
+                    removerTarefa(id);
+                while (getchar() != '\n');
+                break;
+
+            case 3:
+                listarTarefas();
+                break;
+
+            case 4:
+                listarTarefas();
+                printf("  ID da tarefa a marcar como concluida: ");
+                if (scanf("%d", &id) == 1)
+                    marcarConcluida(id);
+                while (getchar() != '\n');
+                break;
+
+            case 0:
+                printf("\n  Ate logo! A libertar memoria...\n");
+                break;
+
+            default:
+                printf("  [ERRO] Opcao invalida. Tente novamente.\n");
+        }
+
+    } while (opcao != 0);
+
+    libertarLista();
+    return 0;
+}
