@@ -1,0 +1,21 @@
+# Exercício 4: Cálculo de Média
+Acumulação de valores numéricos em estruturas lineares.
+
+### Objetivo
+Percorrer a lista, somar as prioridades de todas as tarefas e calcular a média aritmética.
+
+### Código em C
+```c
+float calcularMediaPrioridade(Tarefa *cabeca) {
+    int soma = 0, qtd = 0;
+    Tarefa *atual = cabeca;
+
+    if (cabeca == NULL) return 0;
+
+    while (atual != NULL) {
+        soma += atual->prioridade; // Assume-se que o campo existe
+        qtd++;
+        atual = atual->proximo;
+    }
+    return (float)soma / qtd;
+}
