@@ -1,1 +1,19 @@
+# Exercício 7: Destrutor da Lista
+Gestão manual de memória em C (evitar Memory Leaks).
 
+### Objetivo
+Apagar todos os nós da lista e libertar o espaço na memória (heap).
+
+### Código em C
+```c
+void destruirLista(Tarefa **cabecaRef) {
+    Tarefa *atual = *cabecaRef;
+    Tarefa *proximo;
+
+    while (atual != NULL) {
+        proximo = atual->proximo; // Guarda o próximo antes de apagar o atual
+        free(atual);              // Liberta a memória
+        atual = proximo;          // Avança
+    }
+    *cabecaRef = NULL;
+}
